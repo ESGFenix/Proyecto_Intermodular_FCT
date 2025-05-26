@@ -1,0 +1,2 @@
+USER=app_user@'%'
+PASS=ReallySecurePassword1234#
