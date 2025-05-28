@@ -5,9 +5,9 @@ import java.sql.*;
 
 public class Tenement 
 {
-    public void InsertTenement(String id, int id_landlord, float rent_price, float surface, String description, int type, int accepts_pets, String address, Database db)
+    public static void InsertTenement(String id, int id_landlord, float rent_price, float surface, String description, int type, int accepts_pets, String address, Database db)
     {
-        String sql = "INSERT INTO tenement VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Tenement VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) {
             pstmt.setString(1, id);
@@ -24,9 +24,9 @@ public class Tenement
         }
     }
 
-    public void DeleteTenement(String id, int id_landlord,  Database db)
+    public static void DeleteTenement(String id, int id_landlord,  Database db)
     {
-        String sql = "DELETE FROM tenement WHERE id = ? AND id_landlord = ?";
+        String sql = "DELETE FROM Tenement WHERE id = ? AND id_landlord = ?";
 
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
         {
@@ -38,9 +38,9 @@ public class Tenement
         }
     }
 
-    public void SelectTenement(String id, int id_landlord, Database db)
+    public static void SelectTenement(String id, int id_landlord, Database db)
     {
-        String sql = "SELECT * FROM tenement WHERE id = ? AND id_landlord = ?";
+        String sql = "SELECT * FROM Tenement WHERE id = ? AND id_landlord = ?";
 
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
         {
@@ -57,9 +57,9 @@ public class Tenement
         }
     }
 
-    public void ModifyTenement(String id, int id_landlord, float rent_price, float surface, String description, int type, int accepts_pets, String address, Database db)
+    public static void ModifyTenement(String id, int id_landlord, float rent_price, float surface, String description, int type, int accepts_pets, String address, Database db)
     {
-        String sql = "UPDATE tenement SET rent_price = ?, surface = ?, description = ?, type = ?, accepts_pets = ?, address = ? WHERE id = ? AND id_landlord = ?";
+        String sql = "UPDATE Tenement SET rent_price = ?, surface = ?, description = ?, type = ?, accepts_pets = ?, address = ? WHERE id = ? AND id_landlord = ?";
         
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
         {

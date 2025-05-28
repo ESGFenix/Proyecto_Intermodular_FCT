@@ -20,7 +20,7 @@ public class Database
 
     private Database() throws SQLException 
     {
-        loadCredentials(); // Load USER and PASSWORD from the file
+        LoadCredentials(); // Load USER and PASSWORD from the file
 
         try 
         {
@@ -35,7 +35,7 @@ public class Database
         }
     }
 
-    private void loadCredentials() 
+    private void LoadCredentials() 
     {
         try 
         {
@@ -54,7 +54,7 @@ public class Database
                     if (key.equalsIgnoreCase("USER")) 
                         USER = value;
                     
-                        else if (key.equalsIgnoreCase("PASS")) 
+                    else if (key.equalsIgnoreCase("PASS")) 
                         PASSWORD = value;
                 }
             }
@@ -79,7 +79,7 @@ public class Database
         return connection;
     }
 
-    public void closeConnection() throws SQLException 
+    public void CloseConnection() throws SQLException 
     {
         if (connection != null && !connection.isClosed())
             connection.close();

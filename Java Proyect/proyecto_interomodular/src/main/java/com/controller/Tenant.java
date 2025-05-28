@@ -6,12 +6,27 @@ import java.util.ArrayList;
 
 public class Tenant 
 {
-    public void InsertTenant(String DNI, String name, int has_pet, ArrayList<String> emails, ArrayList<String> phone_numbers, Database db)
+    public static void InsertTenant(String DNI, String name, int has_pet, ArrayList<String> emails, ArrayList<String> phone_numbers, Database db)
     {
         int tenant_id = 0;
 
-        String sql = "INSERT INTO tenant (DNI, name, has_pet) VALUES (?, ?, ?)";
-        try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) {
+        String query = "SELECT id FROM Tenant WHERE DNI = ?";
+        try (PreparedStatement pstmt = db.getConnection().prepareStatement(query)) 
+        {
+            pstmt.setString(1, DNI);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) 
+            {
+                System.out.println("Error: A tenant with this DNI already exists.");
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        query = "INSERT INTO Tenant (DNI, name, has_pet) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = db.getConnection().prepareStatement(query)) {
             pstmt.setString(1, DNI);
             pstmt.setString(2, name);
             pstmt.setInt(3, has_pet);
@@ -20,21 +35,28 @@ public class Tenant
             e.printStackTrace();
         }
         
-        String query = "SELECT id FROM tenant WHERE DNI = " + DNI;
-
-        try (Statement statement = db.getConnection().createStatement();
-            ResultSet resultSet = statement.executeQuery(query)) 
+        try (PreparedStatement pstmt = db.getConnection().prepareStatement("SELECT id FROM Landlord WHERE DNI = ?")) 
         {
-            if (resultSet.next()) 
-                tenant_id = resultSet.getInt("id");  
+            pstmt.setString(1, DNI);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) 
+            {
+                tenant_id = rs.getInt("id");
+            } 
+            else 
+            {
+                System.out.println("Error: Could not retrieve the newly inserted landlord ID.");
+                return;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            return;
         }
 
         for (String phone : phone_numbers) 
         {
-            sql = "INSERT INTO tenant_phone (id_tenant, phone_number) VALUES (?, ?)";
-            try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
+            query = "INSERT INTO Tenant_Phone (id_tenant, phone_number) VALUES (?, ?)";
+            try (PreparedStatement pstmt = db.getConnection().prepareStatement(query)) 
             {
                 pstmt.setInt(1, tenant_id);
                 pstmt.setString(2, phone);
@@ -46,8 +68,8 @@ public class Tenant
 
         for (String email : emails) 
         {
-            sql = "INSERT INTO landlord_email (tenant_id, email) VALUES (?, ?)";
-            try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
+            query = "INSERT INTO Tenant_Email (tenant_id, email) VALUES (?, ?)";
+            try (PreparedStatement pstmt = db.getConnection().prepareStatement(query)) 
             {
                 pstmt.setInt(1, tenant_id);
                 pstmt.setString(2, email);
@@ -58,9 +80,9 @@ public class Tenant
         }
     }
 
-    public void DeleteTenant(int id, Database db)
+    public static void DeleteTenant(int id, Database db)
     {
-        String sql = "DELETE FROM tenant WHERE id = ?";
+        String sql = "DELETE FROM Tenant WHERE id = ?";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
@@ -69,9 +91,9 @@ public class Tenant
         }
     }
 
-    public void SelectTenant(int id, Database db)
+    public static void SelectTenant(int id, Database db)
     {
-        String sql = "SELECT * FROM tenant WHERE id = ?";
+        String sql = "SELECT * FROM Tenant WHERE id = ?";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -85,9 +107,9 @@ public class Tenant
         }
     }
 
-    public void ModifyTenant(int id, String DNI, String name, int has_pet, ArrayList<String> emails, ArrayList<String> phone_numbers, Database db)
+    public static void ModifyTenant(int id, String DNI, String name, int has_pet, ArrayList<String> emails, ArrayList<String> phone_numbers, Database db)
     {
-        String sql = "UPDATE tenant SET DNI = ?, name = ?, has_pet = ? WHERE id = ?";
+        String sql = "UPDATE Tenant SET DNI = ?, name = ?, has_pet = ? WHERE id = ?";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) {
             pstmt.setString(1, DNI);
             pstmt.setString(2, name);
@@ -99,7 +121,7 @@ public class Tenant
         }
 
         // Update phone numbers
-        sql = "DELETE FROM tenant_phone WHERE id_tenant = ?";
+        sql = "DELETE FROM Tenant_Phone WHERE id_tenant = ?";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
@@ -109,7 +131,7 @@ public class Tenant
 
         for (String phone : phone_numbers) 
         {
-            sql = "INSERT INTO tenant_phone (id_tenant, phone_number) VALUES (?, ?)";
+            sql = "INSERT INTO Tenant_Phone (id_tenant, phone_number) VALUES (?, ?)";
             try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
             {
                 pstmt.setInt(1, id);
@@ -121,7 +143,7 @@ public class Tenant
         }
 
         // Update emails
-        sql = "DELETE FROM tenant_email WHERE tenant_id = ?";
+        sql = "DELETE FROM Tenant_Email WHERE tenant_id = ?";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
@@ -131,7 +153,7 @@ public class Tenant
 
         for (String email : emails) 
         {
-            sql = "INSERT INTO tenant_email (tenant_id, email) VALUES (?, ?)";
+            sql = "INSERT INTO Tenant_Email (tenant_id, email) VALUES (?, ?)";
             try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
             {
                 pstmt.setInt(1, id);

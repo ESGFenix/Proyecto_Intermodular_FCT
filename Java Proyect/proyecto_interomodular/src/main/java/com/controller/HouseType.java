@@ -7,7 +7,7 @@ public class HouseType
 {
     public void InsertHouseType(String name, String description, Database db)
     {
-        String query = "INSERT INTO house_type (name, description) VALUES (?, ?)";
+        String query = "INSERT INTO House_Type (name, description) VALUES (?, ?)";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(query)) {
             pstmt.setString(1, name);
             pstmt.setString(2, description);
@@ -19,7 +19,7 @@ public class HouseType
 
     public void DeleteHouseType(int id, Database db)
     {
-        String query = "DELETE FROM house_type WHERE id = ?";
+        String query = "DELETE FROM House_Type WHERE id = ?";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(query)) {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
@@ -30,7 +30,7 @@ public class HouseType
 
     public void ModifyHouseType(int id, String name, String description, Database db)
     {
-        String query = "UPDATE house_type SET name = ?, description = ? WHERE id = ?";
+        String query = "UPDATE House_Type SET name = ?, description = ? WHERE id = ?";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(query)) {
             pstmt.setString(1, name);
             pstmt.setString(2, description);
@@ -43,7 +43,7 @@ public class HouseType
 
     public void SelectHouseType(int id, Database db)
     {
-        String query = "SELECT * FROM house_type WHERE id = ?";
+        String query = "SELECT * FROM House_type WHERE id = ?";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(query)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();

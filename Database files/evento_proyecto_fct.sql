@@ -4,7 +4,7 @@ SET GLOBAL event_scheduler = ON; -- I turn on this variable so the event can act
 DELIMITER //
 
 -- Procedure that is used when the event triggers
-DROP PROCEDURE sp_expired_contract//
+DROP PROCEDURE IF EXISTS sp_expired_contract//
 CREATE PROCEDURE sp_expired_contract()
 BEGIN
 	UPDATE contract SET contract_status = 'EXPIRED' WHERE finish_date > CURDATE() AND contract_status != 'EXPIRED';
