@@ -9,9 +9,9 @@ import com.model.Database;
  */
 public class AdvancedQueries 
 {
-    public void showNotRentedHouses(Database db)
+    public static void showNotRentedHouses(Database db)
     {
-        String sql = "SELECT T.*, H.name FROM House_Type H LEFT JOIN Tenement T ON H.id = T.type LEFT JOIN Contract C ON C.id_tenement = T.id WHERE T.id NOT IN(SELECT id_tenement FROM Contract WHERE contract_status IN ('ACTIVE', 'PENDING'))";
+        String sql = "SELECT T.*, H.name FROM House_Type H JOIN Tenement T ON H.id = T.type JOIN Contract C ON C.id_tenement = T.id WHERE C.contract_status = 'EXPIRED'";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
         {
             ResultSet rs = pstmt.executeQuery();
@@ -21,39 +21,42 @@ public class AdvancedQueries
                 if (rs.getInt("accepts_pets") == 1) 
                     acepta_mascota = "Si";
                 
-                System.out.println("Tenement's ID: " + rs.getString("id") + 
-                                    "\nLandlord's ID: " + rs.getInt("id_landlord") + 
-                                    "\nRent's price: " + rs.getFloat("rent_price") + 
-                                    "\nTenement's surface: " + rs.getFloat("surface") + 
-                                    "\nTenement's description: " + rs.getString("description") + 
-                                    "\nHouse's type: " + rs.getString("name") + 
-                                    "\nAccepts pets: " + acepta_mascota + 
-                                    "\nAddress: " + rs.getString("address"));
+                System.out.println("\tTenement's ID: " + rs.getString("id") + 
+                                    "\n\tLandlord's ID: " + rs.getInt("id_landlord") + 
+                                    "\n\tRent's price: " + rs.getFloat("rent_price") + 
+                                    "\n\tTenement's surface: " + rs.getFloat("surface") + 
+                                    "\n\tTenement's description: " + rs.getString("description") + 
+                                    "\n\tHouse's type: " + rs.getString("name") + 
+                                    "\n\tAccepts pets: " + acepta_mascota + 
+                                    "\n\tAddress: " + rs.getString("address") + 
+                                    "\n-----------------------------------------------------");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void showLandlordsMonthlyGains(Database db)
+    public static void showLandlordsMonthlyGains(Database db)
     {
-        String sql = "SELECT L.id, L.name, SUM(C.rent_price) AS total_gains, AVG(C.rent_price) AS average_rent FROM Landlord L LEFT JOIN Tenement T ON L.id = T.id_landlord LEFT JOIN Contract C ON T.id = C.id_tenement WHERE C.contract_status = 'ACTIVE' GROUP BY L.id";
+        String sql = "SELECT L.id, L.name, SUM(C.price) AS total_gains, AVG(C.price) AS average_rent FROM Landlord L LEFT JOIN Tenement T ON L.id = T.id_landlord LEFT JOIN Contract C ON T.id = C.id_tenement WHERE C.contract_status = 'ACTIVE' GROUP BY L.id";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
         {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) 
             {
-                System.out.println("Landlord's ID: " + rs.getInt("id") + 
-                                   "\nLandlord's name: " + rs.getString("name") + 
-                                   "\nTotal gains this month: " + rs.getFloat("total_gains") + 
-                                   "\nAverage rent of their houses: " + rs.getFloat("average_rent"));
+                System.out.println("------------------------------------------------------------" +
+                                    "\nLandlord's ID: " + rs.getInt("id") + 
+                                    "\nLandlord's name: " + rs.getString("name") + 
+                                    "\nTotal gains this month: " + rs.getFloat("total_gains") + 
+                                    "\nAverage rent of their houses: " + rs.getFloat("average_rent") + 
+                                    "\n------------------------------------------------------------");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void showHousesWithPets(Database db)
+    public static void showHousesWithPets(Database db)
     {
         String sql = "SELECT T.*, H.name FROM House_Type H JOIN Tenement T ON H.id = T.type JOIN Contract C ON C.id_tenement = T.id JOIN Tenant TE ON TE.id = C.id_tenant  WHERE TE.has_pet = 1 AND C.contract_status = 'ACTIVE'";
 
@@ -66,23 +69,25 @@ public class AdvancedQueries
                 if (rs.getInt("accepts_pets") == 1) 
                     acepta_mascota = "Si";
                 
-                System.out.println("Tenement's ID: " + rs.getString("id") + 
+                System.out.println("------------------------------------------------------" +
+                                    "\nTenement's ID: " + rs.getString("id") + 
                                     "\nLandlord's ID: " + rs.getInt("id_landlord") + 
                                     "\nRent's price: " + rs.getFloat("rent_price") + 
                                     "\nTenement's surface: " + rs.getFloat("surface") + 
                                     "\nTenement's description: " + rs.getString("description") + 
                                     "\nHouse's type: " + rs.getString("name") + 
                                     "\nAccepts pets: " + acepta_mascota + 
-                                    "\nAddress: " + rs.getString("address"));
+                                    "\nAddress: " + rs.getString("address") + 
+                                    "\n-----------------------------------------------------");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void showMostRentedHouseType(Database db)
+    public static void showMostRentedHouseType(Database db)
     {
-        String sql = "SELECT h.name, COUNT(t.id) AS total_rents FROM house_type h JOIN tenement t ON h.id = t.type JOIN contract c ON c.id_tenement = t.id WHERE c.contract_status = 'ACTIVE' GROUP BY h.name ORDER BY total_rents DESC LIMIT 1";
+        String sql = "SELECT H.name, COUNT(T.id) AS total_rents FROM House_Type H JOIN Tenement T ON H.id = T.type JOIN Contract C ON C.id_tenement = T.id WHERE C.contract_status = 'ACTIVE' GROUP BY H.name ORDER BY total_rents DESC LIMIT 1";
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
         {
             ResultSet rs = pstmt.executeQuery();

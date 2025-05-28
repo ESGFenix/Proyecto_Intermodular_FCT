@@ -100,11 +100,50 @@ public class Tenant
             while (rs.next()) 
             {
                 String hasPet = rs.getInt("has_pet") == 1 ? "Yes" : "No";
-                System.out.println("Tenant's ID: " + rs.getString("id") + "\n Tenant's DNI: " + rs.getString("DNI") + "\n Tenant's name: " + rs.getString("name") + "\n Has pet: " + hasPet);
+                System.out.print("------------------------------------------------------------" +
+                                    "\n\tTenant's ID: " + rs.getString("id") + 
+                                    "\n\tTenant's DNI: " + rs.getString("DNI") + 
+                                    "\n\tenant's name: " + rs.getString("name") + 
+                                    "\n\tHas pet: " + hasPet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        sql = "SELECT * FROM Tenant_Email WHERE id_tenant = ?";
+        try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
+        {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            System.out.print("\n\tTenant's emails: ");
+            while (rs.next()) 
+            {
+                System.out.print(rs.getString("email"));
+                if (!rs.isLast())
+                    System.out.print(", ");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        sql = "SELECT * FROM Tenant_Phone_Number WHERE id_tenant = ?";
+        try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
+        {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            System.out.print("\n\tTenant's phone numbers: ");
+            while (rs.next()) 
+            {
+                System.out.print(rs.getString("phone_number"));
+                if (!rs.isLast())
+                    System.out.print(", ");
+                else
+                    System.out.print("\n----------------------------------------------------");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println();
     }
 
     public static void ModifyTenant(int id, String DNI, String name, int has_pet, ArrayList<String> emails, ArrayList<String> phone_numbers, Database db)

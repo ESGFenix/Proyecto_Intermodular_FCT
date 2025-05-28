@@ -40,7 +40,21 @@ public class Tenement
 
     public static void SelectTenement(String id, int id_landlord, Database db)
     {
-        String sql = "SELECT * FROM Tenement WHERE id = ? AND id_landlord = ?";
+        String sql = "SELECT H.name FROM House_Type H JOIN Tenement T ON H.id = T.type WHERE T.id = '" + id + "'";
+        String houseType;
+
+        try (Statement stmt = db.getConnection().createStatement(); ResultSet rs = stmt.executeQuery(sql)) 
+        {
+            if (rs.next()) 
+                houseType = rs.getString("name");
+            else
+                houseType = "Unknown";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        sql = "SELECT * FROM Tenement WHERE id = ? AND id_landlord = ?";
 
         try (PreparedStatement pstmt = db.getConnection().prepareStatement(sql)) 
         {
@@ -50,7 +64,16 @@ public class Tenement
             while (rs.next()) 
             {
                 String acceptsPets = rs.getInt("accepts_pets") == 1 ? "Yes" : "No";
-                System.out.println("Tenement's ID: " + rs.getString("id") + "\nTenement landlord's ID" + rs.getString("id_landlord") + "\nRent's price: " + rs.getFloat("rent_price") + "\nTenement's surface: " + rs.getFloat("surface") + "\nTenement's description: " + acceptsPets + "\nTenement's address: " + rs.getString("address"));
+                System.out.println("--------------------------------------------------------" +
+                                    "\n\tTenement's ID: " + rs.getString("id") + 
+                                    "\n\tTenement landlord's ID: " + rs.getString("id_landlord") + 
+                                    "\n\tRent's price: " + rs.getFloat("rent_price") + 
+                                    "\n\tTenement's surface: " + rs.getFloat("surface") + 
+                                    "\n\tTenement's description: " + rs.getString("description") + 
+                                    "\n\tTenement's type: " + houseType +
+                                    "\n\tAccepts pets: " + acceptsPets  +
+                                    "\n\tTenement's address: " + rs.getString("address") + 
+                                    "\n--------------------------------------------------------");
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -49,16 +49,13 @@ public class Menu
                 while(showTenementMenu(db));
                 break;
             case 5:
-                System.out.println("You selected House type options.");
-                // Call house type options method here
+                while(showHouseTypeMenu(db));
                 break;
             case 6:
-                System.out.println("You selected House type options.");
-                // Call house type options method here
+                while(showAdvancedQueriesMenu(db));
                 break;
             case 7:
                 System.out.println("You selected House type options.");
-                // Call house type options method here
                 break;
             case 8:
                 System.out.println("Exiting the program. Goodbye!");
@@ -785,6 +782,143 @@ public class Menu
 
                 Tenement.DeleteTenement(id_tenement, id_landlord, db);
                 System.out.println("Tenant deleted succesfully!");
+                break;
+            case 5:
+                System.out.println("Returning to the main menu...");
+                return false;
+            default:
+            System.out.println("Please, select a valid option.");
+                break;
+        }
+        return true;
+    }
+
+    public static boolean showHouseTypeMenu(Database db)
+    {
+        System.out.println("---------------------------------------------------------------------------------------------------");
+        int option = 0;
+        System.out.println("House Type Options:");
+        System.out.println("1. Create House Type");
+        System.out.println("2. View House Type");
+        System.out.println("3. Update House Type");
+        System.out.println("4. Delete House Type");
+        System.out.println("5. Back to Main Menu");
+        System.out.print("Please select an option: ");
+        
+        while(!sc.hasNextInt())
+        {   
+            System.out.println("Invalid option. Please try again.");
+            sc.next();
+            System.out.print("Please select an option: ");
+        }
+        option = sc.nextInt();
+        sc.nextLine();
+
+
+        switch (option) 
+        {
+            case 1:
+                System.out.print("Enter the name of the house type: ");
+                String name = sc.nextLine();
+
+                System.out.print("Enter the description of the house type: ");
+                String description = sc.nextLine();
+
+                
+                HouseType.InsertHouseType(name, description, db);
+                break;
+        
+            case 2:
+                System.out.print("Enter the ID of the house type: ");
+                while(!sc.hasNextInt())
+                {
+                    System.out.println("Invalid input. Please enter a valid ID.");
+                    sc.next();
+                }
+                int id_house_type = sc.nextInt();
+                HouseType.SelectHouseType(id_house_type, db);
+                break;
+                
+            case 3:
+                System.out.print("Enter the ID of the house type: ");
+                while(!sc.hasNextInt())
+                {
+                    System.out.println("Invalid input. Please enter a valid ID.");
+                    sc.next();
+                }
+                id_house_type = sc.nextInt();
+                sc.nextLine();
+
+                System.out.print("Enter the name of the house type: ");
+                name = sc.nextLine();
+
+                System.out.print("Enter the description of the house type: ");
+                description = sc.nextLine();
+
+                
+                HouseType.ModifyHouseType(id_house_type, name, description, db);
+                break;
+                
+            case 4:
+                System.out.print("Enter the ID of the house type: ");
+                while(!sc.hasNextInt())
+                {
+                    System.out.println("Invalid input. Please enter a valid ID.");
+                    sc.next();
+                }
+                id_house_type = sc.nextInt();
+                sc.nextLine();
+
+                HouseType.DeleteHouseType(id_house_type, db);
+                System.out.println("House type deleted succesfully!");
+                break;
+            case 5:
+                System.out.println("Returning to the main menu...");
+                return false;
+            default:
+            System.out.println("Please, select a valid option.");
+                break;
+        }
+        return true;
+    }
+    public static boolean showAdvancedQueriesMenu(Database db)
+    {
+        System.out.println("---------------------------------------------------------------------------------------------------");
+        int option = 0;
+        System.out.println("Advanced Queries Options:");
+        System.out.println("1. See Not Rented Houses");
+        System.out.println("2. See Landlords Monthly Gains");
+        System.out.println("3. See Houses with Pets");
+        System.out.println("4. See Most Rented House Type");
+        System.out.println("5. Back to Main Menu");
+        System.out.print("Please select an option: ");
+        
+        while(!sc.hasNextInt())
+        {   
+            System.out.println("Invalid option. Please try again.");
+            sc.next();
+            System.out.print("Please select an option: ");
+        }
+        option = sc.nextInt();
+        sc.nextLine();
+
+
+        switch (option) 
+        {
+            case 1:
+                AdvancedQueries.showNotRentedHouses(db);
+                break;
+        
+            case 2:
+                AdvancedQueries.showLandlordsMonthlyGains(db);
+                break;
+                
+            case 3:
+                AdvancedQueries.showHousesWithPets(db);
+                break;
+                
+            case 4:
+                AdvancedQueries.showMostRentedHouseType(db);
                 break;
             case 5:
                 System.out.println("Returning to the main menu...");

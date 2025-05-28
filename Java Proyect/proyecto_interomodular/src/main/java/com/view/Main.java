@@ -11,5 +11,7 @@ public class Main
         Database db = Database.getInstance();
 
         while(Menu.showMenu(db));
+
+        db.CloseConnection();
     }
 }

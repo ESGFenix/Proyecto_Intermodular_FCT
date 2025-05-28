@@ -118,7 +118,10 @@ public class Landlord
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) 
             {
-                System.out.print("Landlord's ID: " + rs.getInt("id") + ", Landlord's DNI: " + rs.getString("DNI") + ", Landlord's name: " + rs.getString("name"));
+                System.out.print("-----------------------------------------------------" + 
+                                "\n\tLandlord's ID: " + rs.getInt("id") + 
+                                "\n\tLandlord's DNI: " + rs.getString("DNI") + 
+                                "\n\tLandlord's name: " + rs.getString("name"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -129,10 +132,12 @@ public class Landlord
         {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            System.out.print(", Landlord's emails: ");
+            System.out.print("\n\tLandlord's emails: ");
             while (rs.next()) 
             {
-                System.out.print(rs.getString("email") + ", ");
+                System.out.print(rs.getString("email"));
+                if (!rs.isLast())
+                    System.out.print(", ");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,10 +148,12 @@ public class Landlord
         {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            System.out.print("Landlord's phone numbers: ");
+            System.out.print("\n\tLandlord's phone numbers: ");
             while (rs.next()) 
             {
-                System.out.print(rs.getString("phone_number") + ", ");
+                System.out.print(rs.getString("phone_number"));
+                if (!rs.isLast())
+                    System.out.print(", ");
             }
         } catch (SQLException e) {
             e.printStackTrace();

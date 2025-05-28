@@ -77,7 +77,13 @@ public class Contract
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) 
             {
-                System.out.println("\tTenement's ID: " + rs.getString("id_tenement") + "\n\tTenant's ID: " + rs.getInt("id_tenant") + "\n\tContract's start day: " + rs.getDate("start_date") + "\n\tContract's finish day: " + rs.getDate("finish_date") + "\n\tContract's status: "  + rs.getString("contract_status"));
+                System.out.println("---------------------------------------------------------------" +
+                                    "\n\tTenement's ID: " + rs.getString("id_tenement") + 
+                                    "\n\tTenant's ID: " + rs.getInt("id_tenant") + 
+                                    "\n\tContract's start day: " + rs.getDate("start_date") + 
+                                    "\n\tContract's finish day: " + rs.getDate("finish_date") + 
+                                    "\n\tContract's status: "  + rs.getString("contract_status") +
+                                    "\n------------------------------------------------------------------");
             }
         } catch (SQLException e) {
             e.printStackTrace();
