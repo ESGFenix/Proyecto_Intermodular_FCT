@@ -7,17 +7,33 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+/**
+ * Singleton class for managing the database connection.
+ * It reads credentials from a configuration file and
+ * provides a shared connection to the application.
+ */
 public class Database 
 {
+    // Base URL and name of the MySQL database
     private static final String URL = "jdbc:mysql://localhost:3306/";
     private static final String DB_NAME = "proyecto_final_fct";
 
+    // Singleton instance of the Database class
     private static Database singleInstance = null;
+
+    // Connection object used to interact with the database
     private Connection connection;
 
+    // Username and password for database access
     private static String USER = "";
     private static String PASSWORD = "";
 
+    /**
+     * Private constructor to enforce Singleton pattern.
+     * It initializes the database connection.
+     *
+     * @throws SQLException if connection fails or is closed
+     */
     private Database() throws SQLException 
     {
         LoadCredentials(); // Load USER and PASSWORD from the file
@@ -35,6 +51,10 @@ public class Database
         }
     }
 
+    /**
+     * Loads database credentials from a local configuration file.
+     * Expected format: key=value with keys USER and PASS.
+     */
     private void LoadCredentials() 
     {
         try 
@@ -66,6 +86,13 @@ public class Database
         }
     }
 
+    /**
+     * Returns the single instance of the Database class.
+     * Creates the instance if it doesn't already exist.
+     *
+     * @return Database instance
+     * @throws SQLException if connection cannot be established
+     */
     public static Database getInstance() throws SQLException 
     {
         if (singleInstance == null)
@@ -74,11 +101,21 @@ public class Database
         return singleInstance;
     }
 
+    /**
+     * Provides access to the underlying SQL connection.
+     *
+     * @return SQL Connection object
+     */
     public Connection getConnection() 
     {
         return connection;
     }
 
+    /**
+     * Closes the SQL connection if it is open.
+     *
+     * @throws SQLException if closing the connection fails
+     */
     public void CloseConnection() throws SQLException 
     {
         if (connection != null && !connection.isClosed())

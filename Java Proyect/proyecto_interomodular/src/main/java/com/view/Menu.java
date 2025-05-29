@@ -5,12 +5,27 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import com.controller.*;
 import com.model.Database;
+import java.io.IOException;
 
+/**
+ * Menu class provides the user interface and handles user interactions
+ * for various modules such as contracts, landlords, tenants, tenements,
+ * house types, and advanced queries in the Alquilaria renting software.
+ */
 public class Menu 
 {
+    /**
+     * Scanner object for user input.
+     */
     private static Scanner sc = new Scanner(System.in);
     
-    public static boolean showMenu(Database db)
+    /**
+     * Displays the main menu and routes the user to the selected option.
+     * 
+     * @param db the Database object to interact with the backend
+     * @return true to keep showing the menu, false to exit
+     */
+    public static boolean showMenu(Database db) throws IOException
     {
         
         System.out.println("---------------------------------------------------------------------------------------------------");
@@ -22,18 +37,22 @@ public class Menu
         System.out.println("4. Tenement options");
         System.out.println("5. House type options");
         System.out.println("6. Advanced queries");
-        System.out.println("7. Export data");
-        System.out.println("8. Exit");
+        System.out.println("7. Export JSON data to Desktop");
+        System.out.println("8. Export CSV data to Desktop");
+        System.out.println("9. Exit");
         System.out.print("Please select an option: ");
         
+
+        // Validate input to make sure it's an int
         while(!sc.hasNextInt())
         {
             System.out.println("Invalid option. Please try again.");
-            sc.next(); // Clear the invalid input
+            sc.next();
             System.out.print("Please select an option: ");
         }
 
         option = sc.nextInt();
+        // Route user to appropriate submenu based on selected option
         switch (option)
         {
             case 1:
@@ -55,9 +74,14 @@ public class Menu
                 while(showAdvancedQueriesMenu(db));
                 break;
             case 7:
-                System.out.println("You selected House type options.");
+                while(ExportData.ExportDataToJSON(db));
+                System.out.println("Data exported successfully!");
                 break;
             case 8:
+                while(ExportData.ExportDataToCSV(db));
+                System.out.println("Data exported successfully!");
+                break;
+            case 9:
                 System.out.println("Exiting the program. Goodbye!");
                 return false;
             default:
@@ -66,6 +90,12 @@ public class Menu
         return true;
     }
 
+    /**
+     * Displays the contract options menu and processes user input.
+     * 
+     * @param db the Database object
+     * @return true to remain in the contract menu, false to go back
+     */
     public static boolean showContractMenu(Database db)
     {
         System.out.println("---------------------------------------------------------------------------------------------------");
@@ -93,7 +123,8 @@ public class Menu
             case 1:
                 int contract_status;
                 System.out.print("Enter the tenant's ID: ");
-                while (!sc.hasNextInt()) {
+                while (!sc.hasNextInt()) 
+                {
                     System.out.println("Invalid input. Please enter a valid tenant ID.");
                     sc.next(); // Clear the invalid input
                 }
@@ -280,6 +311,12 @@ public class Menu
         return true;
     }
 
+    /**
+     * Displays the landlord options menu and processes user input.
+     * 
+     * @param db the Database object
+     * @return true to remain in the landlord menu, false to go back
+     */
     public static boolean showLandlordMenu(Database db)
     {
         System.out.println("---------------------------------------------------------------------------------------------------");
@@ -443,6 +480,12 @@ public class Menu
         return true;
     }
 
+    /**
+     * Displays the tenant options menu and processes user input.
+     * 
+     * @param db the Database object
+     * @return true to remain in the tenant menu, false to go back
+     */
     public static boolean showTenantMenu(Database db)
     {
         System.out.println("---------------------------------------------------------------------------------------------------");
@@ -621,6 +664,12 @@ public class Menu
         return true;
     }
 
+    /**
+     * Displays the tenement options menu and processes user input.
+     * 
+     * @param db the Database object
+     * @return true to remain in the tenement menu, false to go back
+     */
     public static boolean showTenementMenu(Database db)
     {
         System.out.println("---------------------------------------------------------------------------------------------------");
@@ -793,6 +842,12 @@ public class Menu
         return true;
     }
 
+    /**
+     * Displays the house type options menu and processes user input.
+     * 
+     * @param db the Database object
+     * @return true to remain in the house type menu, false to go back
+     */
     public static boolean showHouseTypeMenu(Database db)
     {
         System.out.println("---------------------------------------------------------------------------------------------------");
@@ -881,6 +936,13 @@ public class Menu
         }
         return true;
     }
+
+    /**
+     * Displays the advanced queries menu and processes user input.
+     * 
+     * @param db the Database object
+     * @return true to remain in the advanced queries menu, false to go back
+     */
     public static boolean showAdvancedQueriesMenu(Database db)
     {
         System.out.println("---------------------------------------------------------------------------------------------------");
