@@ -1,5 +1,6 @@
 # Proyecto_Intermodular_FCT
 Este es el repositorio del proyecto final de la FCT
+<p>Este repositorio contiene un programa de gestión de alquileres para la empresa ficticia Alquilaria.<br>En este programa se utiliza un poco de programación orientada a objetos, conexión a la base de datos medante el JDBC y la creación de muchas funciones para los distintos apartados del programa.<br>En este programa no he querido implementar procedimientos en la base de datos para el CRUD porque me parecía más conveniente realizar las inserciones desde el programa.</p>
 Aquí podremos ver:
 <ul>
   <li>El diagrama de entidad-relación de la base de datos</li>
